@@ -1,463 +1,157 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SLAX | Profile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>SLAX | Profile v4.0</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
-    /* ÖZEL İMLEÇ (Tüm standart imleçleri gizler) */
-    * { cursor: none !important; }
-
-    .cursor-dot {
-      width: 8px; height: 8px; 
-      background: var(--blue);
-      position: fixed; border-radius: 50%; pointer-events: none;
-      transform: translate(-50%, -50%); z-index: 9999;
-      transition: background 0.2s ease;
-    }
-    
-    .cursor-outline {
-      width: 40px; height: 40px; 
-      border: 2px solid rgba(75, 125, 255, 0.5);
-      position: fixed; border-radius: 50%; pointer-events: none;
-      transform: translate(-50%, -50%); z-index: 9998;
-      transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease;
-    }
-
-    /* BEYAZ MOD */
     :root {
-      --bg: #f4f7fb; 
-      --card: rgba(255, 255, 255, 0.9);
-      --stroke: rgba(0,0,0,.08);
-      --text: #05060b;
-      --muted: #7d8599;
-      --muted2: #9ba3b6;
-      --blue: #4b7dff;
-      --green: #1ed760;
-      --shadow: 0 24px 80px rgba(0,0,0,.1);
-      --radius: 28px;
-      
-      --pill-border: rgba(0,0,0,.08);
-      --pill-bg: rgba(0,0,0,.035);
-      --pill-text: #333;
-      
-      --btn-border: rgba(0,0,0,.07);
-      --btn-bg: linear-gradient(180deg, rgba(0,0,0,.04), rgba(0,0,0,.02));
-      --btn-hover-border: rgba(92,124,255,.42);
-      --btn-hover-bg: linear-gradient(180deg, rgba(80,115,255,.10), rgba(0,0,0,.035));
-      
-      --icon-bg: rgba(0,0,0,.055);
-      --icon-text: #333;
-      
-      --stat-card-bg: linear-gradient(180deg, rgba(0,0,0,.04), rgba(0,0,0,.02));
-      --stat-card-border: rgba(0,0,0,.06);
-      
-      --avatar-bg: #f0f0f0;
-      --avatar-border: rgba(0,0,0,.12);
-      
-      --rain-color: rgba(0, 0, 0, 0.25);
+      --bg: #05060b; --card: rgba(18,20,31,.75); --stroke: rgba(255,255,255,.08);
+      --text: #f4f7fb; --muted: #9ba3b6; --blue: #4b7dff; --green: #1ed760;
+      --shadow: 0 24px 80px rgba(0,0,0,.45); --radius: 28px;
     }
 
-    /* SİYAH MOD (VARSAYILAN) */
-    [data-theme="dark"] {
-      --bg: #05060b;
-      --card: rgba(18,20,31,.72);
-      --stroke: rgba(255,255,255,.08);
-      --text: #f4f7fb;
-      --muted: #9ba3b6;
-      --muted2: #7d8599;
-      --shadow: 0 24px 80px rgba(0,0,0,.45);
-      
-      --pill-border: rgba(255,255,255,.08);
-      --pill-bg: rgba(255,255,255,.035);
-      --pill-text: #cfd6e6;
-      
-      --btn-border: rgba(255,255,255,.07);
-      --btn-bg: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-      --btn-hover-border: rgba(92,124,255,.42);
-      --btn-hover-bg: linear-gradient(180deg, rgba(80,115,255,.10), rgba(255,255,255,.035));
-      
-      --icon-bg: rgba(255,255,255,.055);
-      --icon-text: #fff;
-      
-      --stat-card-bg: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-      --stat-card-border: rgba(255,255,255,.06);
-      
-      --avatar-bg: #111420;
-      --avatar-border: rgba(255,255,255,.12);
-      
-      --rain-color: rgba(255, 255, 255, 0.35);
+    html, body {
+      width: 100%; min-height: 100vh; margin: 0; padding: 0;
+      font-family: 'Inter', sans-serif; color: var(--text); background-color: var(--bg);
+      background-image: url('./bg.jpg'); background-size: cover; background-position: center;
+      background-attachment: fixed; display: flex; justify-content: center; 
+      align-items: center; overflow-x: hidden; overflow-y: auto;
     }
 
-    html,body{
-      width:100%;
-      height:100%;
-      font-family:"Inter",sans-serif;
-      color:var(--text);
-      background-color: var(--bg);
-      background-image: url('bg.jpg'); 
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      overflow: hidden; 
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background-color 0.4s ease, color 0.4s ease;
+    #rain-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+    .drop { position: absolute; top: -100px; width: 2px; height: 60px; background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.2)); animation: fall linear infinite; }
+    @keyframes fall { 0% { transform: translateY(-5vh); } 100% { transform: translateY(110vh); } }
+
+    @media (min-width: 1024px) {
+      * { cursor: none !important; }
+      .cursor-dot { width: 8px; height: 8px; background: #4b7dff; position: fixed; border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); z-index: 9999; }
+      .cursor-outline { width: 40px; height: 40px; border: 2px solid rgba(75, 125, 255, 0.5); position: fixed; border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); z-index: 9998; transition: all 0.2s ease; }
     }
 
-    #rain-container {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      pointer-events: none; z-index: 0; overflow: hidden;
-    }
+    .layout { width: min(100%, 920px); display: grid; gap: 18px; padding: 40px 20px; position: relative; z-index: 10; }
+    .card { background: var(--card); border: 1px solid var(--stroke); border-radius: var(--radius); box-shadow: var(--shadow); backdrop-filter: blur(18px); padding: 26px; }
 
-    .drop {
-      position: absolute; top: -100px; width: 2px; height: 60px;
-      background: linear-gradient(to bottom, transparent, var(--rain-color));
-      animation: fall linear infinite;
-    }
+    .hero { display: grid; grid-template-columns: auto 1fr auto; gap: 18px; align-items: center; }
+    .avatar { width: 92px; height: 92px; border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .name { font-size: clamp(28px, 5vw, 42px); font-weight: 800; margin: 0; letter-spacing: -1.5px; }
 
-    @keyframes fall {
-      0% { transform: translateY(-5vh); }
-      100% { transform: translateY(110vh); }
-    }
+    .grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 18px; margin-top: 18px; }
+    .status-title { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; font-weight: 800; margin-bottom: 15px; }
 
-    .perspective-wrapper {
-      width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; z-index: 10; 
-    }
+    .links-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .link-btn { display: flex; align-items: center; justify-content: center; padding: 14px; border-radius: 18px; border: 1px solid var(--stroke); background: rgba(255,255,255,0.03); color: var(--text); text-decoration: none; transition: 0.3s ease; font-size: 14px; font-weight: 600; }
+    .link-btn:hover { background: rgba(75, 125, 255, 0.1); border-color: var(--blue); transform: translateY(-3px); }
 
-    .layout{
-      width:min(100%, 920px); display:grid; gap:18px; padding: 20px;
-      transition: transform 0.1s ease-out; will-change: transform; position: relative;
-    }
+    .status-card { padding: 18px; border-radius: 20px; background: rgba(255,255,255,0.03); border: 1px solid var(--stroke); margin-bottom: 15px; }
+    .activity-container { display: flex; align-items: center; gap: 14px; }
+    .activity-img { width: 64px; height: 64px; border-radius: 14px; object-fit: cover; border: 1px solid var(--stroke); }
 
-    .card, .pill, .link-btn, .icon-wrap, .status-card, .avatar, .activity-img {
-      transition: background 0.4s ease, border-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease, transform 0.2s ease;
-    }
-
-    .card{
-      position:relative; background: var(--card); border:1px solid var(--stroke);
-      border-radius:var(--radius); box-shadow:var(--shadow); backdrop-filter: blur(16px); overflow:hidden;
-    }
-
-    .hero{ padding:26px; display:grid; grid-template-columns:auto 1fr auto; gap:18px; align-items:center; min-height:170px; }
-    .avatar{ width:92px; height:92px; border-radius:24px; overflow:hidden; border:1px solid var(--avatar-border); background: var(--avatar-bg); }
-    .avatar img{ width:100%; height:100%; object-fit:cover; display:block; }
-    .identity-top{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:8px; }
-    .name{ font-size:clamp(34px, 5vw, 52px); font-weight:800; letter-spacing:-.04em; line-height:.95; }
-    .verify{ width:22px; height:22px; border-radius:999px; display:grid; place-items:center; background:linear-gradient(180deg, #4f8fff, #2f6dff); font-size:12px; font-weight:700; color: white; }
-    .tagline{ color:var(--muted); font-size:13px; letter-spacing:.25em; text-transform:uppercase; font-weight:600; }
-    .presence{ display:flex; align-items:center; gap:10px; margin-top:16px; }
-    .status-dot{ width:12px; height:12px; border-radius:999px; background:var(--green); box-shadow:0 0 0 5px rgba(30,215,96,.12), 0 0 18px rgba(30,215,96,.55); }
-    .presence span{ color:var(--muted); font-size:14px; }
-    
-    .hero-side{ display:flex; flex-direction:column; align-items:flex-end; gap:10px; }
-    .pill{ border:1px solid var(--pill-border); background:var(--pill-bg); color:var(--pill-text); padding:9px 14px; border-radius:999px; font-size:12px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; }
-    #theme-btn { display: flex; align-items: center; gap: 6px; user-select: none; }
-    #theme-btn:hover { background: var(--btn-hover-border); color: #fff; }
-
-    .grid{ display:grid; grid-template-columns:1.15fr .95fr; gap:18px; }
-    .section{ padding:22px; min-height:330px; }
-    .section-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; }
-    .eyebrow{ font-size:12px; letter-spacing:.24em; color:var(--muted2); text-transform:uppercase; font-weight:700; }
-    .subtle-time{ font-size:12px; color:var(--muted2); letter-spacing:.18em; text-transform:uppercase; font-weight:700; }
-
-    .links{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px; }
-    .link-btn{ display:flex; align-items:center; gap:12px; min-height:60px; padding:16px 18px; border-radius:18px; border:1px solid var(--btn-border); background: var(--btn-bg); color:var(--text); text-decoration:none; position: relative; z-index: 10; }
-    .link-btn:hover{ transform:translateY(-3px); border-color:var(--btn-hover-border); background: var(--btn-hover-bg); box-shadow:var(--shadow); }
-    .link-btn.full{ grid-column:1 / -1; }
-    .icon-wrap{ width:30px; height:30px; border-radius:10px; display:grid; place-items:center; background: var(--icon-bg); color: var(--icon-text); font-size:14px; flex-shrink:0; }
-    .link-btn span{ font-weight:600; color:var(--text); transition: color 0.4s ease; }
-
-    .status-box{ display:flex; flex-direction:column; justify-content:space-between; gap:18px; height:100%; }
-    .status-card{ padding:18px; border-radius:20px; background: var(--stat-card-bg); border:1px solid var(--stat-card-border); }
-    .status-title{ font-size:13px; color:var(--muted); margin-bottom:10px; text-transform:uppercase; letter-spacing:.14em; font-weight:700; }
-
-    .activity-container { display: flex; align-items: center; gap: 14px; margin-top: 4px; }
-    .activity-img { width: 64px; height: 64px; border-radius: 12px; object-fit: cover; flex-shrink: 0; border: 1px solid var(--avatar-border); background: var(--avatar-bg); }
-    .activity-info { display: flex; flex-direction: column; gap: 4px; justify-content:center;}
-    
-    /* Canlı/Geçmiş Etiketleri İçin Yeni Stil */
-    .live-badge { font-size:11px; font-weight:800; letter-spacing:1px; text-transform:uppercase; margin-bottom:2px; }
-    .badge-active { color: var(--green); }
-    .badge-past { color: var(--muted); }
-
-    .footer-meta{ display:flex; justify-content:space-between; align-items:center; gap:10px; padding-top:12px; border-top:1px solid var(--stroke); color:var(--muted2); font-size:11px; letter-spacing:.16em; text-transform:uppercase; font-weight:700; }
-
-    @media (max-width: 860px){
-      .grid{ grid-template-columns:1fr; }
-      .hero{ grid-template-columns:1fr; text-align:center; }
-      .avatar{ margin:0 auto; }
-      .identity-top, .presence{ justify-content:center; }
-      .hero-side{ align-items:center; }
+    @media (max-width: 800px) {
+      body { align-items: flex-start; padding-top: 20px; }
+      .layout { padding: 20px 15px; gap: 12px; }
+      .hero { grid-template-columns: 1fr; text-align: center; }
+      .avatar { margin: 0 auto; width: 80px; height: 80px; }
+      .grid { grid-template-columns: 1fr; }
+      .links-grid { grid-template-columns: 1fr; }
+      .card { padding: 20px; }
     }
   </style>
 </head>
 <body>
-
+  <div id="rain-container"></div>
   <div class="cursor-dot" id="cursor-dot"></div>
   <div class="cursor-outline" id="cursor-outline"></div>
 
-  <div id="rain-container"></div>
+  <main class="layout">
+    <section class="card hero">
+      <div class="avatar"><img src="./avatar.jpg" alt="SLAX"></div>
+      <div>
+        <h1 class="name">SLAX <span style="color:var(--blue); font-size:18px;">✓</span></h1>
+        <p style="color:var(--muted); margin: 5px 0 0 0; font-size: 13px; font-weight: 500;">THANK GOD, I BREATHE</p>
+      </div>
+      <div style="font-size: 10px; padding: 8px 16px; border: 1px solid var(--stroke); border-radius: 99px; font-weight: 800; opacity: 0.8;">OFFICIAL</div>
+    </section>
 
-  <div class="perspective-wrapper">
-    <main class="layout">
-      
-      <section class="card hero">
-        <div class="avatar">
-          <img src="avatar.jpg" alt="SLAX Avatar">
-        </div>
-        <div class="identity">
-          <div class="identity-top">
-            <h1 class="name">SLAX</h1>
-            <div class="verify">✓</div>
-          </div>
-          <p class="tagline">thank god, i breathe</p>
-          <div class="presence">
-            <div class="status-dot"></div>
-            <span>online</span>
-          </div>
-        </div>
-        <div class="hero-side">
-          <div class="pill">official profile</div>
-          <div class="pill interactive-el" id="theme-btn">
-            <span id="theme-icon">☀️</span>
-            <span id="theme-text">Light Mode</span>
-          </div>
+    <div class="grid">
+      <section class="card">
+        <div class="status-title">Connect</div>
+        <div class="links-grid">
+          <a href="https://www.instagram.com/99slax/" target="_blank" class="link-btn">Instagram</a>
+          <a href="https://www.tiktok.com/@slax994" target="_blank" class="link-btn">TikTok</a>
+          <a href="https://steamcommunity.com/id/slax1/" target="_blank" class="link-btn">Steam</a>
+          <a href="https://discord.com/users/1429063669186302103" target="_blank" class="link-btn">Discord</a>
         </div>
       </section>
 
-      <section class="grid">
-        
-        <div class="card section">
-          <div class="section-head">
-            <div class="eyebrow">links</div>
-          </div>
-          <div class="links">
-            <a class="link-btn interactive-el" href="https://www.instagram.com/99slax/" target="_blank">
-              <div class="icon-wrap">◎</div><span>Instagram</span>
-            </a>
-            <a class="link-btn interactive-el" href="https://www.tiktok.com/@slax994" target="_blank">
-              <div class="icon-wrap">♪</div><span>TikTok</span>
-            </a>
-            <a class="link-btn interactive-el" href="https://steamcommunity.com/id/slax1/" target="_blank">
-              <div class="icon-wrap">◉</div><span>Steam</span>
-            </a>
-            <a class="link-btn interactive-el" href="http://googleusercontent.com/spotify.com/6" target="_blank">
-              <div class="icon-wrap">♫</div><span>Spotify</span>
-            </a>
-            <a class="link-btn full interactive-el" href="http://discordapp.com/users/1429063669186302103" target="_blank">
-              <div class="icon-wrap">✦</div><span>Discord</span>
-            </a>
-          </div>
-        </div>
-
-        
-        <div class="card section">
-          <div class="section-head">
-            <div class="eyebrow">status</div>
-            <div class="subtle-time" id="clock">00:00</div>
-          </div>
-          <div class="status-box">
-            <div class="status-card">
-              <div class="status-title">spotify status</div>
-              <div id="spotify-status">Yükleniyor...</div>
-            </div>
-            <div class="status-card">
-              <div class="status-title">game activity</div>
-              <div id="about-text">Yükleniyor...</div>
-            </div>
-            <div class="footer-meta">
-              <span>slax profile</span>
-              <span>online</span>
-            </div>
-          </div>
-        </div>
+      <section class="card">
+        <div class="status-title">Status</div>
+        <div class="status-card"><div class="status-title" style="font-size:9px;">Spotify</div><div id="spotify-status">Yükleniyor...</div></div>
+        <div class="status-card"><div class="status-title" style="font-size:9px;">Game Activity</div><div id="game-status">Boşta</div></div>
       </section>
-    </main>
-  </div>
+    </div>
+  </main>
 
   <script>
-    // --- ÖZEL İMLEÇ (CUSTOM CURSOR) MANTIĞI ---
-    const cursorDot = document.getElementById('cursor-dot');
-    const cursorOutline = document.getElementById('cursor-outline');
-
-    window.addEventListener('mousemove', (e) => {
-      cursorDot.style.left = `${e.clientX}px`;
-      cursorDot.style.top = `${e.clientY}px`;
-      
-      // Halkanın yumuşakça takip etmesi
-      cursorOutline.animate({
-        left: `${e.clientX}px`,
-        top: `${e.clientY}px`
-      }, { duration: 400, fill: "forwards" });
-    });
-
-    // Linklerin ve butonların üzerine gelince imlecin büyümesi
-    document.querySelectorAll('.interactive-el').forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        cursorOutline.style.width = '60px';
-        cursorOutline.style.height = '60px';
-        cursorOutline.style.borderColor = 'var(--green)';
-        cursorDot.style.background = 'var(--green)';
+    if (window.innerWidth > 1024) {
+      const dot = document.getElementById('cursor-dot');
+      const outline = document.getElementById('cursor-outline');
+      window.addEventListener('mousemove', (e) => {
+        dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
+        outline.style.left = e.clientX + 'px'; outline.style.top = e.clientY + 'px';
       });
-      el.addEventListener('mouseleave', () => {
-        cursorOutline.style.width = '40px';
-        cursorOutline.style.height = '40px';
-        cursorOutline.style.borderColor = 'rgba(75, 125, 255, 0.5)';
-        cursorDot.style.background = 'var(--blue)';
+      const layout = document.querySelector('.layout');
+      document.addEventListener('mousemove', (e) => {
+        const x = (window.innerWidth / 2 - e.pageX) / 45;
+        const y = (window.innerHeight / 2 - e.pageY) / 45;
+        layout.style.transform = `perspective(1000px) rotateY(${x}deg) rotateX(${-y}deg)`;
       });
-    });
-
-    // --- YAĞMUR ---
-    function createRain() {
-      const rainContainer = document.getElementById('rain-container');
-      for (let i = 0; i < 70; i++) {
-        const drop = document.createElement('div');
-        drop.classList.add('drop');
-        drop.style.left = Math.random() * 100 + 'vw';
-        drop.style.animationDuration = Math.random() * 1 + 0.5 + 's';
-        drop.style.animationDelay = Math.random() * 2 + 's';
-        drop.style.opacity = Math.random() * 0.5 + 0.2;
-        rainContainer.appendChild(drop);
-      }
     }
-    createRain();
 
-    // --- TEMA DEĞİŞTİRME ---
-    const themeBtn = document.getElementById('theme-btn');
-    const themeIcon = document.getElementById('theme-icon');
-    const themeText = document.getElementById('theme-text');
-    let isDark = true; 
-
-    themeBtn.addEventListener('click', () => {
-      isDark = !isDark;
-      if(isDark) {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        themeIcon.textContent = '☀️';
-        themeText.textContent = 'Light Mode';
-      } else {
-        document.documentElement.removeAttribute('data-theme');
-        themeIcon.textContent = '🌙';
-        themeText.textContent = 'Dark Mode';
-      }
-    });
-
-    // --- SAAT ---
-    function updateClock(){
-      const now = new Date();
-      document.getElementById("clock").textContent = String(now.getHours()).padStart(2, "0") + ":" + String(now.getMinutes()).padStart(2, "0");
+    const rain = document.getElementById('rain-container');
+    for (let i = 0; i < 35; i++) {
+      const drop = document.createElement('div'); drop.classList.add('drop');
+      drop.style.left = Math.random() * 100 + 'vw'; drop.style.animationDuration = (Math.random() * 0.5 + 0.5) + 's';
+      drop.style.animationDelay = Math.random() * 2 + 's'; rain.appendChild(drop);
     }
-    updateClock(); setInterval(updateClock, 1000);
 
-    // --- LANYARD API & AKILLI HAFIZA ---
-    const customGames = {
-      "counter-strike 2": "https://cdn.cloudflare.steamstatic.com/steam/apps/730/header.jpg",
-      "grand theft auto v": "https://cdn.cloudflare.steamstatic.com/steam/apps/271590/header.jpg",
-      "valorant": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Valorant_logo_-_pink_color_version.svg/512px-Valorant_logo_-_pink_color_version.svg.png",
-      "roblox": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Roblox_player_icon_black.svg/512px-Roblox_player_icon_black.svg.png",
-      "league of legends": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/League_of_Legends_2019_vector.svg/512px-League_of_Legends_2019_vector.svg.png",
-      "metin2": "https://cdn.cloudflare.steamstatic.com/steam/apps/550900/header.jpg",
-      "muck": "https://cdn.cloudflare.steamstatic.com/steam/apps/1625450/header.jpg"
-    };
+    const myLogos = { "counter-strike 2": "./cs.jpg", "valorant": "./valorant.png", "grand theft auto v": "./gtav.jpg", "minecraft": "./minecraft.jpg", "roblox": "./roblox.jpg", "pubg: battlegrounds": "./pubg.png" };
 
-    async function getLanyardData() {
-      const discordId = "1429063669186302103"; 
+    async function update() {
       try {
-        const response = await fetch(`https://api.lanyard.rest/v1/users/${discordId}`);
-        const data = await response.json();
-        if (data.success) {
-          
-          // --- SPOTIFY HAFIZA KONTROLÜ ---
-          const spStatus = document.getElementById("spotify-status");
-          if (data.data.listening_to_spotify) {
-            const sp = data.data.spotify;
-            localStorage.setItem('slax_last_spotify', JSON.stringify(sp)); // Hafızaya kaydet
-            
-            spStatus.innerHTML = `
-              <div class="activity-container">
-                <img src="${sp.album_art_url}" class="activity-img">
-                <div class="activity-info">
-                  <div class="live-badge badge-active">Şu an dinliyor 🎵</div>
-                  <span style="font-size:15px;font-weight:700;color:var(--text);">${sp.song}</span>
-                  <span style="font-size:13px;color:var(--muted);">${sp.artist}</span>
-                </div>
-              </div>`;
-          } else { 
-            // Dinlemiyorsa hafızaya bak
-            const lastSp = JSON.parse(localStorage.getItem('slax_last_spotify'));
-            if(lastSp) {
-              spStatus.innerHTML = `
-              <div class="activity-container" style="opacity: 0.85;">
-                <img src="${lastSp.album_art_url}" class="activity-img" style="filter: grayscale(40%);">
-                <div class="activity-info">
-                  <div class="live-badge badge-past">En son dinliyordu 🕰️</div>
-                  <span style="font-size:15px;font-weight:700;color:var(--text);">${lastSp.song}</span>
-                  <span style="font-size:13px;color:var(--muted);">${lastSp.artist}</span>
-                </div>
-              </div>`;
-            } else {
-              spStatus.innerHTML = `<span style="font-size:14px;color:var(--muted);">Şu an müzik dinlemiyor 😴</span>`; 
-            }
-          }
+        const res = await fetch('https://api.lanyard.rest/v1/users/1429063669186302103');
+        const { data } = await res.json();
+        
+        const spEl = document.getElementById("spotify-status");
+        if (data.listening_to_spotify) {
+          const s = data.spotify; localStorage.setItem('last_sp_slax', JSON.stringify(s));
+          spEl.innerHTML = `<div class="activity-container"><img src="${s.album_art_url}" class="activity-img"><div><div style="color:var(--green);font-size:10px;font-weight:800">DİNLİYOR</div><div style="font-weight:700">${s.song}</div></div></div>`;
+        } else {
+          const last = JSON.parse(localStorage.getItem('last_sp_slax'));
+          spEl.innerHTML = last ? `<div class="activity-container" style="opacity:0.6"><img src="${last.album_art_url}" class="activity-img" style="filter:grayscale(1)"><div><div style="color:var(--muted);font-size:10px;font-weight:800">SON DİNLENEN⏳</div><div style="font-weight:700">${last.song}</div></div></div>` : 'Çevrimdışı';
+        }
 
-          // --- OYUN HAFIZA KONTROLÜ ---
-          const aboutText = document.getElementById("about-text");
-          const game = data.data.activities.find(a => a.type === 0);
-          
-          if (game) {
-            localStorage.setItem('slax_last_game', JSON.stringify(game)); // Hafızaya kaydet
-            let img = customGames[game.name.toLowerCase()] || `https://ui-avatars.com/api/?name=${encodeURIComponent(game.name)}&background=111420&color=4b7dff&size=128&rounded=true&font-size=0.4`;
-            
-            aboutText.innerHTML = `
-              <div class="activity-container">
-                <img src="${img}" class="activity-img">
-                <div class="activity-info">
-                  <div class="live-badge badge-active">Şu an oynuyor 🎮</div>
-                  <span style="color:#4b7dff;font-weight:700;font-size:15px;">${game.name}</span>
-                  <span style="font-size:12px;color:var(--muted);">${game.details || ''}</span>
-                </div>
-              </div>`;
-          } else { 
-            // Oynamıyorsa hafızaya bak
-            const lastGame = JSON.parse(localStorage.getItem('slax_last_game'));
-            if(lastGame) {
-              let img = customGames[lastGame.name.toLowerCase()] || `https://ui-avatars.com/api/?name=${encodeURIComponent(lastGame.name)}&background=111420&color=4b7dff&size=128&rounded=true&font-size=0.4`;
-              aboutText.innerHTML = `
-              <div class="activity-container" style="opacity: 0.85;">
-                <img src="${img}" class="activity-img" style="filter: grayscale(40%);">
-                <div class="activity-info">
-                  <div class="live-badge badge-past">En son oynuyordu 🕰️</div>
-                  <span style="color:#4b7dff;font-weight:700;font-size:15px;">${lastGame.name}</span>
-                  <span style="font-size:12px;color:var(--muted);">${lastGame.details || 'Çevrimdışı'}</span>
-                </div>
-              </div>`;
-            } else {
-              aboutText.innerHTML = `<span style="font-size:14px;color:var(--muted);">Şu an oyun oynamıyor 💤</span>`; 
-            }
-          }
+        const gEl = document.getElementById("game-status");
+        const act = data.activities.find(a => a.type === 0);
+        if (act) {
+          localStorage.setItem('last_g_slax', JSON.stringify(act));
+          const img = myLogos[act.name.toLowerCase()] || "./avatar.jpg";
+          gEl.innerHTML = `<div class="activity-container"><img src="${img}" class="activity-img"><div><div style="color:var(--blue);font-size:10px;font-weight:800">OYNUYOR</div><div style="font-weight:700">${act.name}</div></div></div>`;
+        } else {
+          const last = JSON.parse(localStorage.getItem('last_g_slax'));
+          if(last) {
+            const img = myLogos[last.name.toLowerCase()] || "./avatar.jpg";
+            gEl.innerHTML = `<div class="activity-container" style="opacity:0.6"><img src="${img}" class="activity-img" style="filter:grayscale(1)"><div><div style="color:var(--muted);font-size:10px;font-weight:800">SON OYNANAN⏳</div><div style="font-weight:700">${last.name}</div></div></div>`;
+          } else { gEl.textContent = 'Oyun oynamıyor'; }
         }
       } catch (e) { console.error(e); }
     }
-    getLanyardData(); setInterval(getLanyardData, 10000);
-
-    // --- 3D BÜKÜLME EFEKTİ ---
-    const layout = document.querySelector('.layout');
-
-    document.addEventListener('mousemove', (e) => {
-      const xAxis = (window.innerWidth / 2 - e.pageX) / 30; 
-      const yAxis = (window.innerHeight / 2 - e.pageY) / 30;
-      layout.style.transform = `perspective(1000px) rotateY(${xAxis}deg) rotateX(${-yAxis}deg)`;
-    });
-
-    document.addEventListener('mouseleave', () => {
-      layout.style.transform = `perspective(1000px) rotateY(0deg) rotateX(0deg)`;
-    });
+    update(); setInterval(update, 10000);
   </script>
 </body>
 </html>
