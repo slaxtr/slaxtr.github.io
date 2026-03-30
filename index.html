@@ -1,157 +1,260 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>SLAX | Profile v4.0</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SLAX | Profile</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
+    /* ÖZEL İMLEÇ */
+    * { cursor: none !important; }
+
+    .cursor-dot {
+      width: 8px; height: 8px; 
+      background: var(--blue);
+      position: fixed; border-radius: 50%; pointer-events: none;
+      transform: translate(-50%, -50%); z-index: 9999;
+      transition: background 0.2s ease;
+    }
+    
+    .cursor-outline {
+      width: 40px; height: 40px; 
+      border: 2px solid rgba(75, 125, 255, 0.5);
+      position: fixed; border-radius: 50%; pointer-events: none;
+      transform: translate(-50%, -50%); z-index: 9998;
+      transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease;
+    }
+
+    /* RENK DEĞİŞKENLERİ */
     :root {
-      --bg: #05060b; --card: rgba(18,20,31,.75); --stroke: rgba(255,255,255,.08);
-      --text: #f4f7fb; --muted: #9ba3b6; --blue: #4b7dff; --green: #1ed760;
-      --shadow: 0 24px 80px rgba(0,0,0,.45); --radius: 28px;
+      --bg: #f4f7fb; 
+      --card: rgba(255, 255, 255, 0.9);
+      --stroke: rgba(0,0,0,.08);
+      --text: #05060b;
+      --muted: #7d8599;
+      --muted2: #9ba3b6;
+      --blue: #4b7dff;
+      --green: #1ed760;
+      --shadow: 0 24px 80px rgba(0,0,0,.1);
+      --radius: 28px;
+      --avatar-bg: #f0f0f0;
+      --avatar-border: rgba(0,0,0,.12);
+      --rain-color: rgba(0, 0, 0, 0.25);
+      --icon-bg: rgba(0,0,0,.055);
+      --icon-text: #333;
+      --btn-bg: linear-gradient(180deg, rgba(0,0,0,.04), rgba(0,0,0,.02));
+      --btn-border: rgba(0,0,0,.07);
+      --btn-hover-bg: linear-gradient(180deg, rgba(80,115,255,.10), rgba(0,0,0,.035));
+      --btn-hover-border: rgba(92,124,255,.42);
+      --stat-card-bg: linear-gradient(180deg, rgba(0,0,0,.04), rgba(0,0,0,.02));
+      --stat-card-border: rgba(0,0,0,.06);
     }
 
-    html, body {
-      width: 100%; min-height: 100vh; margin: 0; padding: 0;
-      font-family: 'Inter', sans-serif; color: var(--text); background-color: var(--bg);
-      background-image: url('./bg.jpg'); background-size: cover; background-position: center;
-      background-attachment: fixed; display: flex; justify-content: center; 
-      align-items: center; overflow-x: hidden; overflow-y: auto;
+    [data-theme="dark"] {
+      --bg: #05060b;
+      --card: rgba(18,20,31,.72);
+      --stroke: rgba(255,255,255,.08);
+      --text: #f4f7fb;
+      --muted: #9ba3b6;
+      --muted2: #7d8599;
+      --shadow: 0 24px 80px rgba(0,0,0,.45);
+      --avatar-bg: #111420;
+      --avatar-border: rgba(255,255,255,.12);
+      --rain-color: rgba(255, 255, 255, 0.35);
+      --icon-bg: rgba(255,255,255,.055);
+      --icon-text: #fff;
+      --btn-bg: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      --btn-border: rgba(255,255,255,.07);
+      --btn-hover-bg: linear-gradient(180deg, rgba(80,115,255,.10), rgba(255,255,255,.035));
+      --btn-hover-border: rgba(92,124,255,.42);
+      --stat-card-bg: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      --stat-card-border: rgba(255,255,255,.06);
     }
 
-    #rain-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
-    .drop { position: absolute; top: -100px; width: 2px; height: 60px; background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.2)); animation: fall linear infinite; }
+    html,body{
+      width:100%; height:100%; font-family:"Inter",sans-serif;
+      color:var(--text); background-color: var(--bg);
+      background-image: url('bg.jpg'); background-size: cover; background-position: center;
+      overflow: hidden; display: flex; align-items: center; justify-content: center;
+    }
+
+    #rain-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+    .drop { position: absolute; top: -100px; width: 2px; height: 60px; background: linear-gradient(to bottom, transparent, var(--rain-color)); animation: fall linear infinite; }
     @keyframes fall { 0% { transform: translateY(-5vh); } 100% { transform: translateY(110vh); } }
 
-    @media (min-width: 1024px) {
-      * { cursor: none !important; }
-      .cursor-dot { width: 8px; height: 8px; background: #4b7dff; position: fixed; border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); z-index: 9999; }
-      .cursor-outline { width: 40px; height: 40px; border: 2px solid rgba(75, 125, 255, 0.5); position: fixed; border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); z-index: 9998; transition: all 0.2s ease; }
-    }
+    .layout{ width:min(100%, 920px); display:grid; gap:18px; padding: 20px; transition: transform 0.1s ease-out; position: relative; z-index: 10; }
+    .card{ position:relative; background: var(--card); border:1px solid var(--stroke); border-radius:var(--radius); box-shadow:var(--shadow); backdrop-filter: blur(16px); overflow:hidden; }
 
-    .layout { width: min(100%, 920px); display: grid; gap: 18px; padding: 40px 20px; position: relative; z-index: 10; }
-    .card { background: var(--card); border: 1px solid var(--stroke); border-radius: var(--radius); box-shadow: var(--shadow); backdrop-filter: blur(18px); padding: 26px; }
+    .hero{ padding:26px; display:grid; grid-template-columns:auto 1fr auto; gap:18px; align-items:center; }
+    .avatar{ width:92px; height:92px; border-radius:24px; overflow:hidden; border:1px solid var(--avatar-border); background: var(--avatar-bg); }
+    .avatar img{ width:100%; height:100%; object-fit:cover; }
+    .name{ font-size:clamp(34px, 5vw, 52px); font-weight:800; letter-spacing:-.04em; line-height:.95; }
+    .verify{ width:22px; height:22px; border-radius:999px; display:grid; place-items:center; background:linear-gradient(180deg, #4f8fff, #2f6dff); font-size:12px; font-weight:700; color: white; margin-left: 10px; }
+    .tagline{ color:var(--muted); font-size:13px; letter-spacing:.25em; text-transform:uppercase; font-weight:600; margin-top: 8px; }
+    
+    .grid{ display:grid; grid-template-columns:1.15fr .95fr; gap:18px; }
+    .section{ padding:22px; }
+    .links{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px; }
+    .link-btn{ display:flex; align-items:center; gap:12px; min-height:60px; padding:16px 18px; border-radius:18px; border:1px solid var(--btn-border); background: var(--btn-bg); color:var(--text); text-decoration:none; transition: all 0.3s ease; }
+    .link-btn:hover{ transform:translateY(-3px); border-color:var(--btn-hover-border); background: var(--btn-hover-bg); }
+    .link-btn.full{ grid-column:1 / -1; }
+    .icon-wrap{ width:30px; height:30px; border-radius:10px; display:grid; place-items:center; background: var(--icon-bg); color: var(--icon-text); }
 
-    .hero { display: grid; grid-template-columns: auto 1fr auto; gap: 18px; align-items: center; }
-    .avatar { width: 92px; height: 92px; border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
-    .avatar img { width: 100%; height: 100%; object-fit: cover; }
-    .name { font-size: clamp(28px, 5vw, 42px); font-weight: 800; margin: 0; letter-spacing: -1.5px; }
-
-    .grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 18px; margin-top: 18px; }
-    .status-title { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; font-weight: 800; margin-bottom: 15px; }
-
-    .links-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .link-btn { display: flex; align-items: center; justify-content: center; padding: 14px; border-radius: 18px; border: 1px solid var(--stroke); background: rgba(255,255,255,0.03); color: var(--text); text-decoration: none; transition: 0.3s ease; font-size: 14px; font-weight: 600; }
-    .link-btn:hover { background: rgba(75, 125, 255, 0.1); border-color: var(--blue); transform: translateY(-3px); }
-
-    .status-card { padding: 18px; border-radius: 20px; background: rgba(255,255,255,0.03); border: 1px solid var(--stroke); margin-bottom: 15px; }
+    .status-card{ padding:18px; border-radius:20px; background: var(--stat-card-bg); border:1px solid var(--stat-card-border); margin-bottom: 15px; }
+    .status-title{ font-size:11px; color:var(--muted); margin-bottom:12px; text-transform:uppercase; letter-spacing:.14em; font-weight:800; }
+    
     .activity-container { display: flex; align-items: center; gap: 14px; }
-    .activity-img { width: 64px; height: 64px; border-radius: 14px; object-fit: cover; border: 1px solid var(--stroke); }
+    .activity-img { width: 64px; height: 64px; border-radius: 14px; object-fit: cover; border: 1px solid var(--avatar-border); }
+    .live-badge { font-size:10px; font-weight:800; letter-spacing:1px; text-transform:uppercase; margin-bottom:4px; }
+    .badge-active { color: var(--green); }
+    .badge-past { color: var(--muted); }
 
-    @media (max-width: 800px) {
-      body { align-items: flex-start; padding-top: 20px; }
-      .layout { padding: 20px 15px; gap: 12px; }
-      .hero { grid-template-columns: 1fr; text-align: center; }
-      .avatar { margin: 0 auto; width: 80px; height: 80px; }
-      .grid { grid-template-columns: 1fr; }
-      .links-grid { grid-template-columns: 1fr; }
-      .card { padding: 20px; }
-    }
+    @media (max-width: 860px){ .grid{ grid-template-columns:1fr; } .hero{ grid-template-columns:1fr; text-align:center; } .avatar{ margin:0 auto; } }
   </style>
 </head>
 <body>
-  <div id="rain-container"></div>
+
   <div class="cursor-dot" id="cursor-dot"></div>
   <div class="cursor-outline" id="cursor-outline"></div>
+  <div id="rain-container"></div>
 
-  <main class="layout">
-    <section class="card hero">
-      <div class="avatar"><img src="./avatar.jpg" alt="SLAX"></div>
-      <div>
-        <h1 class="name">SLAX <span style="color:var(--blue); font-size:18px;">✓</span></h1>
-        <p style="color:var(--muted); margin: 5px 0 0 0; font-size: 13px; font-weight: 500;">THANK GOD, I BREATHE</p>
-      </div>
-      <div style="font-size: 10px; padding: 8px 16px; border: 1px solid var(--stroke); border-radius: 99px; font-weight: 800; opacity: 0.8;">OFFICIAL</div>
-    </section>
-
-    <div class="grid">
-      <section class="card">
-        <div class="status-title">Connect</div>
-        <div class="links-grid">
-          <a href="https://www.instagram.com/99slax/" target="_blank" class="link-btn">Instagram</a>
-          <a href="https://www.tiktok.com/@slax994" target="_blank" class="link-btn">TikTok</a>
-          <a href="https://steamcommunity.com/id/slax1/" target="_blank" class="link-btn">Steam</a>
-          <a href="https://discord.com/users/1429063669186302103" target="_blank" class="link-btn">Discord</a>
+  <div class="perspective-wrapper" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
+    <main class="layout">
+      
+      <section class="card hero">
+        <div class="avatar"><img src="avatar.jpg" alt="SLAX"></div>
+        <div class="identity">
+          <div style="display:flex; align-items:center;"><h1 class="name">SLAX</h1><div class="verify">✓</div></div>
+          <p class="tagline">thank god, i breathe</p>
+        </div>
+        <div class="hero-side" style="display:flex; flex-direction:column; gap:8px;">
+          <div class="pill" style="font-size:10px; padding:6px 12px; border:1px solid var(--stroke); border-radius:99px; text-align:center;">OFFICIAL PROFILE</div>
+          <div class="pill interactive-el" id="theme-btn" style="font-size:10px; padding:6px 12px; border:1px solid var(--stroke); border-radius:99px; cursor:pointer; text-align:center;">
+            <span id="theme-icon">☀️</span> <span id="theme-text">Light Mode</span>
+          </div>
         </div>
       </section>
 
-      <section class="card">
-        <div class="status-title">Status</div>
-        <div class="status-card"><div class="status-title" style="font-size:9px;">Spotify</div><div id="spotify-status">Yükleniyor...</div></div>
-        <div class="status-card"><div class="status-title" style="font-size:9px;">Game Activity</div><div id="game-status">Boşta</div></div>
+      <section class="grid">
+        <div class="card section">
+          <div class="status-title">links</div>
+          <div class="links">
+            <a class="link-btn interactive-el" href="https://www.instagram.com/99slax/" target="_blank"><div class="icon-wrap">◎</div><span>Instagram</span></a>
+            <a class="link-btn interactive-el" href="https://www.tiktok.com/@slax994" target="_blank"><div class="icon-wrap">♪</div><span>TikTok</span></a>
+            <a class="link-btn interactive-el" href="https://steamcommunity.com/id/slax1/" target="_blank"><div class="icon-wrap">◉</div><span>Steam</span></a>
+            <a class="link-btn interactive-el" href="#" target="_blank"><div class="icon-wrap">♫</div><span>Spotify</span></a>
+            <a class="link-btn full interactive-el" href="#" target="_blank"><div class="icon-wrap">✦</div><span>Discord</span></a>
+          </div>
+        </div>
+
+        <div class="card section">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+            <div class="status-title" style="margin:0;">status</div>
+            <div id="clock" style="font-size:11px; font-weight:700; color:var(--muted2);">00:00</div>
+          </div>
+          
+          <div class="status-card">
+            <div class="status-title">spotify status</div>
+            <div id="spotify-status">Müzik aranıyor...</div>
+          </div>
+
+          <div class="status-card">
+            <div class="status-title">game activity</div>
+            <div id="about-text">Oyun aranıyor...</div>
+          </div>
+        </div>
       </section>
-    </div>
-  </main>
+    </main>
+  </div>
 
   <script>
-    if (window.innerWidth > 1024) {
-      const dot = document.getElementById('cursor-dot');
-      const outline = document.getElementById('cursor-outline');
-      window.addEventListener('mousemove', (e) => {
-        dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
-        outline.style.left = e.clientX + 'px'; outline.style.top = e.clientY + 'px';
-      });
-      const layout = document.querySelector('.layout');
-      document.addEventListener('mousemove', (e) => {
-        const x = (window.innerWidth / 2 - e.pageX) / 45;
-        const y = (window.innerHeight / 2 - e.pageY) / 45;
-        layout.style.transform = `perspective(1000px) rotateY(${x}deg) rotateX(${-y}deg)`;
-      });
-    }
+    // --- CURSOR ---
+    const dot = document.getElementById('cursor-dot');
+    const outline = document.getElementById('cursor-outline');
+    window.addEventListener('mousemove', (e) => {
+      dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
+      outline.animate({ left: e.clientX + 'px', top: e.clientY + 'px' }, { duration: 400, fill: "forwards" });
+    });
 
+    // --- THEME ---
+    const themeBtn = document.getElementById('theme-btn');
+    let isDark = true;
+    themeBtn.addEventListener('click', () => {
+      isDark = !isDark;
+      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+      document.getElementById('theme-icon').textContent = isDark ? '☀️' : '🌙';
+      document.getElementById('theme-text').textContent = isDark ? 'Light Mode' : 'Dark Mode';
+    });
+
+    // --- RAIN ---
     const rain = document.getElementById('rain-container');
-    for (let i = 0; i < 35; i++) {
+    for (let i = 0; i < 50; i++) {
       const drop = document.createElement('div'); drop.classList.add('drop');
-      drop.style.left = Math.random() * 100 + 'vw'; drop.style.animationDuration = (Math.random() * 0.5 + 0.5) + 's';
+      drop.style.left = Math.random() * 100 + 'vw'; drop.style.animationDuration = Math.random() * 1 + 0.5 + 's';
       drop.style.animationDelay = Math.random() * 2 + 's'; rain.appendChild(drop);
     }
 
-    const myLogos = { "counter-strike 2": "./cs.jpg", "valorant": "./valorant.png", "grand theft auto v": "./gtav.jpg", "minecraft": "./minecraft.jpg", "roblox": "./roblox.jpg", "pubg: battlegrounds": "./pubg.png" };
+    // --- CLOCK ---
+    setInterval(() => {
+      const n = new Date(); document.getElementById("clock").textContent = n.getHours().toString().padStart(2, '0') + ":" + n.getMinutes().toString().padStart(2, '0');
+    }, 1000);
 
-    async function update() {
+    // --- LANYARD & CUSTOM IMAGES ---
+    const customGames = {
+      "counter-strike 2": "./cs.jpg",
+      "grand theft auto v": "./gtav.jpg",
+      "valorant": "./valorant.png",
+      "roblox": "./roblox.jpg",
+      "pubg: battlegrounds": "./pubg.png",
+      "minecraft": "./minecraft.jpg",
+      "league of legends": "./lol-logo.jpg",
+      "metin2": "./metin2-logo.jpg"
+    };
+
+    async function updateLanyard() {
       try {
         const res = await fetch('https://api.lanyard.rest/v1/users/1429063669186302103');
         const { data } = await res.json();
         
+        // Spotify
         const spEl = document.getElementById("spotify-status");
         if (data.listening_to_spotify) {
-          const s = data.spotify; localStorage.setItem('last_sp_slax', JSON.stringify(s));
-          spEl.innerHTML = `<div class="activity-container"><img src="${s.album_art_url}" class="activity-img"><div><div style="color:var(--green);font-size:10px;font-weight:800">DİNLİYOR</div><div style="font-weight:700">${s.song}</div></div></div>`;
+          const s = data.spotify;
+          localStorage.setItem('last_sp', JSON.stringify(s));
+          spEl.innerHTML = `<div class="activity-container"><img src="${s.album_art_url}" class="activity-img"><div><div class="live-badge badge-active">Dinliyor</div><div style="font-weight:700;">${s.song}</div><div style="font-size:12px;color:var(--muted);">${s.artist}</div></div></div>`;
         } else {
-          const last = JSON.parse(localStorage.getItem('last_sp_slax'));
-          spEl.innerHTML = last ? `<div class="activity-container" style="opacity:0.6"><img src="${last.album_art_url}" class="activity-img" style="filter:grayscale(1)"><div><div style="color:var(--muted);font-size:10px;font-weight:800">SON DİNLENEN⏳</div><div style="font-weight:700">${last.song}</div></div></div>` : 'Çevrimdışı';
+          const last = JSON.parse(localStorage.getItem('last_sp'));
+          spEl.innerHTML = last ? `<div class="activity-container" style="opacity:0.6"><img src="${last.album_art_url}" class="activity-img" style="filter:grayscale(1)"><div><div class="live-badge badge-past">Son Dinlenen</div><div style="font-weight:700;">${last.song}</div></div></div>` : 'Çevrimdışı';
         }
 
-        const gEl = document.getElementById("game-status");
-        const act = data.activities.find(a => a.type === 0);
-        if (act) {
-          localStorage.setItem('last_g_slax', JSON.stringify(act));
-          const img = myLogos[act.name.toLowerCase()] || "./avatar.jpg";
-          gEl.innerHTML = `<div class="activity-container"><img src="${img}" class="activity-img"><div><div style="color:var(--blue);font-size:10px;font-weight:800">OYNUYOR</div><div style="font-weight:700">${act.name}</div></div></div>`;
+        // Games
+        const gEl = document.getElementById("about-text");
+        const game = data.activities.find(a => a.type === 0);
+        if (game) {
+          localStorage.setItem('last_g', JSON.stringify(game));
+          const img = customGames[game.name.toLowerCase()] || `https://ui-avatars.com/api/?name=${game.name}&background=111420&color=4b7dff`;
+          gEl.innerHTML = `<div class="activity-container"><img src="${img}" class="activity-img"><div><div class="live-badge badge-active">Oynuyor</div><div style="font-weight:700;color:var(--blue);">${game.name}</div></div></div>`;
         } else {
-          const last = JSON.parse(localStorage.getItem('last_g_slax'));
+          const last = JSON.parse(localStorage.getItem('last_g'));
           if(last) {
-            const img = myLogos[last.name.toLowerCase()] || "./avatar.jpg";
-            gEl.innerHTML = `<div class="activity-container" style="opacity:0.6"><img src="${img}" class="activity-img" style="filter:grayscale(1)"><div><div style="color:var(--muted);font-size:10px;font-weight:800">SON OYNANAN⏳</div><div style="font-weight:700">${last.name}</div></div></div>`;
+            const img = customGames[last.name.toLowerCase()] || `https://ui-avatars.com/api/?name=${last.name}&background=111420&color=4b7dff`;
+            gEl.innerHTML = `<div class="activity-container" style="opacity:0.6"><img src="${img}" class="activity-img" style="filter:grayscale(1)"><div><div class="live-badge badge-past">Son Oynanan</div><div style="font-weight:700;">${last.name}</div></div></div>`;
           } else { gEl.textContent = 'Oyun oynamıyor'; }
         }
       } catch (e) { console.error(e); }
     }
-    update(); setInterval(update, 10000);
+    updateLanyard(); setInterval(updateLanyard, 10000);
+
+    // --- 3D EFFECT ---
+    const layout = document.querySelector('.layout');
+    document.addEventListener('mousemove', (e) => {
+      const x = (window.innerWidth / 2 - e.pageX) / 40;
+      const y = (window.innerHeight / 2 - e.pageY) / 40;
+      layout.style.transform = `perspective(1000px) rotateY(${x}deg) rotateX(${-y}deg)`;
+    });
   </script>
 </body>
 </html>
