@@ -169,16 +169,16 @@
       document.getElementById('theme-text').textContent = isDark ? 'Light Mode' : 'Dark Mode';
     });
 
-    // --- ARKA PLAN MÜZİĞİ KONTROLÜ (GÜNCELLENDİ) ---
+    // --- ARKA PLAN MÜZİĞİ KONTROLÜ (SES İYİCE KISILDI) ---
     const musicBtn = document.getElementById('music-btn');
     const bgMusic = document.getElementById('bg-music');
     const musicIcon = document.getElementById('music-icon');
     const musicText = document.getElementById('music-text');
 
-    // Sesi rahatsız etmeyecek %15 seviyesine çektik
-    bgMusic.volume = 0.15; 
+    // Ses seviyesini %2'ye indirdik. Eğer yine az gelirse 0.05 falan yapabilirsin.
+    bgMusic.volume = 0.02; 
 
-    // Emojilerin KESİN DOĞRU olmasını sağlayan olay dinleyicileri (müzik çalarsa 🔊 olur, durursa 🔇 olur)
+    // Emojilerin KESİN DOĞRU olmasını sağlayan olay dinleyicileri
     bgMusic.addEventListener('play', () => {
       musicIcon.textContent = '🔊';
       musicText.textContent = 'Müziği Kapat';
@@ -204,7 +204,6 @@
       if (bgMusic.paused) {
         bgMusic.play().catch(() => {});
       }
-      // Bir kere tetiklendikten sonra dinleyicileri kaldır (gereksiz yormasın)
       document.removeEventListener('click', forcePlayMusic);
       document.removeEventListener('keydown', forcePlayMusic);
     };
