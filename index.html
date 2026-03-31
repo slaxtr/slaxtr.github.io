@@ -114,7 +114,7 @@
           <span id="theme-icon">☀️</span> <span id="theme-text">Light Mode</span>
         </div>
         <div class="pill interactive-el" id="music-btn" style="font-size:10px; padding:6px 12px; border:1px solid var(--stroke); border-radius:99px; cursor:pointer; text-align:center;">
-          <span id="music-icon">🔊</span> <span id="music-text">Müziği Kapat</span>
+          <span id="music-icon">🔇</span> <span id="music-text">Müziği Aç</span>
         </div>
       </div>
     </section>
@@ -169,39 +169,48 @@
       document.getElementById('theme-text').textContent = isDark ? 'Light Mode' : 'Dark Mode';
     });
 
-    // --- ARKA PLAN MÜZİĞİ KONTROLÜ ---
+    // --- ARKA PLAN MÜZİĞİ KONTROLÜ (GÜNCELLENDİ) ---
     const musicBtn = document.getElementById('music-btn');
     const bgMusic = document.getElementById('bg-music');
     const musicIcon = document.getElementById('music-icon');
     const musicText = document.getElementById('music-text');
-    let isMusicPlaying = true; // Başlangıçta çalıyor kabul ediyoruz
 
-    // Arka plan müziğinin ses seviyesini buradan ayarlayabilirsin (0.0 ile 1.0 arası)
-    bgMusic.volume = 0.4; 
+    // Sesi rahatsız etmeyecek %15 seviyesine çektik
+    bgMusic.volume = 0.15; 
 
-    // Tarayıcının otomatik oynatmayı engelleyip engellemediğini kontrol eden akıllı sistem
-    const playPromise = bgMusic.play();
-    if (playPromise !== undefined) {
-      playPromise.catch(error => {
-        // Eğer ziyaretçinin tarayıcısı sesin otomatik başlamasını engellerse:
-        isMusicPlaying = false;
-        musicIcon.textContent = '🔇';
-        musicText.textContent = 'Müziği Aç';
-      });
-    }
-
-    musicBtn.addEventListener('click', () => {
-      if (isMusicPlaying) {
-        bgMusic.pause();
-        musicIcon.textContent = '🔇';
-        musicText.textContent = 'Müziği Aç';
-      } else {
-        bgMusic.play();
-        musicIcon.textContent = '🔊';
-        musicText.textContent = 'Müziği Kapat';
-      }
-      isMusicPlaying = !isMusicPlaying;
+    // Emojilerin KESİN DOĞRU olmasını sağlayan olay dinleyicileri (müzik çalarsa 🔊 olur, durursa 🔇 olur)
+    bgMusic.addEventListener('play', () => {
+      musicIcon.textContent = '🔊';
+      musicText.textContent = 'Müziği Kapat';
     });
+
+    bgMusic.addEventListener('pause', () => {
+      musicIcon.textContent = '🔇';
+      musicText.textContent = 'Müziği Aç';
+    });
+
+    // Butona tıklandığında aç/kapat işlemi
+    musicBtn.addEventListener('click', (e) => {
+      e.stopPropagation(); // Sayfaya tıklama event'ini tetiklememesi için
+      if (bgMusic.paused) {
+        bgMusic.play();
+      } else {
+        bgMusic.pause();
+      }
+    });
+
+    // TARAYICI ENGELİNİ AŞMA HİLESİ: Ekrana ilk tıklandığında veya tuşa basıldığında zorla başlat
+    const forcePlayMusic = () => {
+      if (bgMusic.paused) {
+        bgMusic.play().catch(() => {});
+      }
+      // Bir kere tetiklendikten sonra dinleyicileri kaldır (gereksiz yormasın)
+      document.removeEventListener('click', forcePlayMusic);
+      document.removeEventListener('keydown', forcePlayMusic);
+    };
+
+    document.addEventListener('click', forcePlayMusic);
+    document.addEventListener('keydown', forcePlayMusic);
 
     // --- RAIN ---
     const rain = document.getElementById('rain-container');
