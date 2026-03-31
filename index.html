@@ -92,4 +92,160 @@
   </style>
 </head>
 <body>
-  <audio id="bg-
+  <audio id="bg-music" loop>
+    <source src="arkaplan.mp3" type="audio/mpeg">
+    Tarayıcınız audio etiketini desteklemiyor.
+  </audio>
+
+  <div class="cursor-dot" id="cursor-dot"></div>
+  <div class="cursor-outline" id="cursor-outline"></div>
+  <div id="rain-container"></div>
+
+  <main class="layout">
+    <section class="card hero">
+      <div class="avatar"><img src="avatar.jpg" alt="SLAX"></div>
+      <div class="identity">
+        <div style="display:flex; align-items:center;"><h1 class="name">SLAX</h1><div class="verify">✓</div></div>
+        <p class="tagline">thank god, i breathe</p>
+      </div>
+      <div class="hero-side" style="display:flex; flex-direction:column; gap:8px;">
+        <div class="pill" style="font-size:10px; padding:6px 12px; border:1px solid var(--stroke); border-radius:99px; text-align:center;">OFFICIAL PROFILE</div>
+        <div class="pill interactive-el" id="theme-btn" style="font-size:10px; padding:6px 12px; border:1px solid var(--stroke); border-radius:99px; cursor:pointer; text-align:center;">
+          <span id="theme-icon">☀️</span> <span id="theme-text">Light Mode</span>
+        </div>
+        <div class="pill interactive-el" id="music-btn" style="font-size:10px; padding:6px 12px; border:1px solid var(--stroke); border-radius:99px; cursor:pointer; text-align:center;">
+          <span id="music-icon">🔇</span> <span id="music-text">Müziği Aç</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid">
+      <section class="card section">
+        <div class="status-title">links</div>
+        <div class="links">
+          <a class="link-btn interactive-el" href="https://www.instagram.com/99slax/" target="_blank"><div class="icon-wrap">◎</div><span>Instagram</span></a>
+          <a class="link-btn interactive-el" href="https://www.tiktok.com/@slax994" target="_blank"><div class="icon-wrap">♪</div><span>TikTok</span></a>
+          <a class="link-btn interactive-el" href="https://steamcommunity.com/id/slax1/" target="_blank"><div class="icon-wrap">◉</div><span>Steam</span></a>
+          <a class="link-btn interactive-el" href="#" target="_blank"><div class="icon-wrap">♫</div><span>Spotify</span></a>
+          <a class="link-btn full interactive-el" href="#" target="_blank"><div class="icon-wrap">✦</div><span>Discord</span></a>
+        </div>
+      </section>
+
+      <section class="card section">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+          <div class="status-title" style="margin:0;">status</div>
+          <div id="clock" style="font-size:11px; font-weight:700; color:var(--muted2);">00:00</div>
+        </div>
+        <div class="status-card">
+          <div class="status-title">spotify status</div>
+          <div id="spotify-status">Müzik aranıyor...</div>
+        </div>
+        <div class="status-card">
+          <div class="status-title">game activity</div>
+          <div id="about-text">Oyun aranıyor...</div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    // --- CURSOR (Sadece Masaüstü) ---
+    if (window.innerWidth > 1024) {
+      const dot = document.getElementById('cursor-dot');
+      const outline = document.getElementById('cursor-outline');
+      window.addEventListener('mousemove', (e) => {
+        dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
+        outline.animate({ left: e.clientX + 'px', top: e.clientY + 'px' }, { duration: 400, fill: "forwards" });
+      });
+    }
+
+    // --- THEME ---
+    const themeBtn = document.getElementById('theme-btn');
+    let isDark = true;
+    themeBtn.addEventListener('click', () => {
+      isDark = !isDark;
+      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+      document.getElementById('theme-icon').textContent = isDark ? '☀️' : '🌙';
+      document.getElementById('theme-text').textContent = isDark ? 'Light Mode' : 'Dark Mode';
+    });
+
+    // --- ARKA PLAN MÜZİĞİ KONTROLÜ ---
+    const musicBtn = document.getElementById('music-btn');
+    const bgMusic = document.getElementById('bg-music');
+    const musicIcon = document.getElementById('music-icon');
+    const musicText = document.getElementById('music-text');
+    let isMusicPlaying = false;
+
+    // Arka plan müziğinin ses seviyesini buradan ayarlayabilirsin (0.0 ile 1.0 arası)
+    bgMusic.volume = 0.4; 
+
+    musicBtn.addEventListener('click', () => {
+      if (isMusicPlaying) {
+        bgMusic.pause();
+        musicIcon.textContent = '🔇';
+        musicText.textContent = 'Müziği Aç';
+      } else {
+        bgMusic.play();
+        musicIcon.textContent = '🔊';
+        musicText.textContent = 'Müziği Kapat';
+      }
+      isMusicPlaying = !isMusicPlaying;
+    });
+
+    // --- RAIN ---
+    const rain = document.getElementById('rain-container');
+    for (let i = 0; i < 40; i++) {
+      const drop = document.createElement('div'); drop.classList.add('drop');
+      drop.style.left = Math.random() * 100 + 'vw'; drop.style.animationDuration = Math.random() * 1 + 0.5 + 's';
+      drop.style.animationDelay = Math.random() * 2 + 's'; rain.appendChild(drop);
+    }
+
+    // --- CLOCK ---
+    setInterval(() => {
+      const n = new Date(); document.getElementById("clock").textContent = n.getHours().toString().padStart(2, '0') + ":" + n.getMinutes().toString().padStart(2, '0');
+    }, 1000);
+
+    // --- LANYARD & CUSTOM IMAGES ---
+    const customGames = { "counter-strike 2": "./cs.jpg", "grand theft auto v": "./gtav.jpg", "valorant": "./valorant.png", "roblox": "./roblox.jpg", "pubg: battlegrounds": "./pubg.png", "minecraft": "./minecraft.jpg", "league of legends": "./lol-logo.jpg", "metin2": "./metin2-logo.jpg" };
+
+    async function updateLanyard() {
+      try {
+        const res = await fetch('https://api.lanyard.rest/v1/users/1429063669186302103');
+        const { data } = await res.json();
+        const spEl = document.getElementById("spotify-status");
+        if (data.listening_to_spotify) {
+          const s = data.spotify; localStorage.setItem('last_sp', JSON.stringify(s));
+          spEl.innerHTML = `<div class="activity-container"><img src="${s.album_art_url}" class="activity-img"><div><div class="live-badge badge-active">Dinliyor</div><div style="font-weight:700;">${s.song}</div><div style="font-size:12px;color:var(--muted);">${s.artist}</div></div></div>`;
+        } else {
+          const last = JSON.parse(localStorage.getItem('last_sp'));
+          spEl.innerHTML = last ? `<div class="activity-container" style="opacity:0.6"><img src="${last.album_art_url}" class="activity-img" style="filter:grayscale(1)"><div><div class="live-badge badge-past">Son Dinlenen</div><div style="font-weight:700;">${last.song}</div></div></div>` : 'Çevrimdışı';
+        }
+        const gEl = document.getElementById("about-text");
+        const game = data.activities.find(a => a.type === 0);
+        if (game) {
+          localStorage.setItem('last_g', JSON.stringify(game));
+          const img = customGames[game.name.toLowerCase()] || `https://ui-avatars.com/api/?name=${game.name}&background=111420&color=4b7dff`;
+          gEl.innerHTML = `<div class="activity-container"><img src="${img}" class="activity-img"><div><div class="live-badge badge-active">Oynuyor</div><div style="font-weight:700;color:var(--blue);">${game.name}</div></div></div>`;
+        } else {
+          const last = JSON.parse(localStorage.getItem('last_g'));
+          if(last) {
+            const img = customGames[last.name.toLowerCase()] || `https://ui-avatars.com/api/?name=${last.name}&background=111420&color=4b7dff`;
+            gEl.innerHTML = `<div class="activity-container" style="opacity:0.6"><img src="${img}" class="activity-img" style="filter:grayscale(1)"><div><div class="live-badge badge-past">Son Oynanan</div><div style="font-weight:700;">${last.name}</div></div></div>`;
+          } else { gEl.textContent = 'Oyun oynamıyor'; }
+        }
+      } catch (e) { console.error(e); }
+    }
+    updateLanyard(); setInterval(updateLanyard, 10000);
+
+    // --- 3D EFFECT (Sadece Masaüstü) ---
+    if (window.innerWidth > 1024) {
+      const layout = document.querySelector('.layout');
+      document.addEventListener('mousemove', (e) => {
+        const x = (window.innerWidth / 2 - e.pageX) / 40;
+        const y = (window.innerHeight / 2 - e.pageY) / 40;
+        layout.style.transform = `perspective(1000px) rotateY(${x}deg) rotateX(${-y}deg)`;
+      });
+    }
+  </script>
+</body>
+</html>
